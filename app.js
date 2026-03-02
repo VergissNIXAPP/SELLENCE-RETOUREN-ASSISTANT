@@ -2,6 +2,7 @@
   const LIMIT = 500.0;
   const CATS = ["ZIGARETTEN","FEINSCHNITT","CONSUMABLES"];
   const $ = (id)=>document.getElementById(id);
+  const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
   const state = { creditRate:0.90, activeCat:"ZIGARETTEN", packages:[], current:null, recognition:null, listening:false };
 
@@ -344,6 +345,15 @@
       $("manualPrice").value=""; $("manualPrice").focus();
     };
     $("manualPrice").addEventListener("keydown",(e)=>{ if(e.key==="Enter"){ e.preventDefault(); $("addManual").click(); } });
+    const dictBtn = $("dictateBtn");
+    if(dictBtn){
+      dictBtn.onclick = () => {
+        const inp = $("manualPrice");
+        inp.focus();
+        inp.select?.();
+        toast("Diktat: iOS-Mikro am Keyboard nutzen.", "ok");
+      };
+    }
 
     $("finishBtn").onclick=()=>{
       stopListening();
@@ -365,10 +375,13 @@ $("resetBtn").onclick=()=>{
 
     $("modal").addEventListener("click",(e)=>{ if(e.target.id==="modal") closeLimitModal(); });
 
+    const hint = $("iosHint");
+    if(isIOS() && hint){ hint.style.display = "block"; }
     if(!speechSupported()){
-      $("micText").textContent="Sprachmodus nicht verfügbar";
+      $("micText").textContent="Live-Sprachmodus (Safari)";
       $("micBtn").disabled=true;
       $("micBtn").style.opacity="0.7";
+      if(hint){ hint.style.display = "block"; }
     }
   }
 

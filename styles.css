@@ -30,6 +30,12 @@ body{
   align-items:center;
 }
 .top{
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
   width:min(1100px, 100%);
   padding: 18px 16px 8px;
   display:flex;
@@ -262,3 +268,14 @@ input{
   .row.between{ flex-direction:column; align-items:stretch; }
   .summaryGrid, .pkgGrid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
 }
+
+
+/* iOS / WebApp polish */
+html { -webkit-text-size-adjust: 100%; }
+body{
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
+}
+button, input { touch-action: manipulation; }
+input{ font-size: 16px; } /* prevents iOS zoom on focus */
+.main{ padding-bottom: calc(20px + env(safe-area-inset-bottom)); }

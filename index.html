@@ -2,8 +2,12 @@
 <html lang="de">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no" />
   <meta name="theme-color" content="#0b0f1e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="SELLENCE-RETOUREN" />
+  <meta name="format-detection" content="telephone=no" />
   <title>SELLENCE-RETOUREN-ASSISTANT</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/icon-192.png">
@@ -44,7 +48,7 @@
         <div class="pill-group" role="group" aria-label="Kategorie">
           <button data-cat="ZIGARETTEN" class="pill cat" type="button">ZIGARETTEN</button>
           <button data-cat="FEINSCHNITT" class="pill cat" type="button">FEINSCHNITT</button>
-          <button data-cat="CONSUMABLES" class="pill cat" type="button">CONSUMABLES</button>
+          <button data-cat="CONSUMABLES" class="pill cat" type="button">Consumables</button>
         </div>
       </div>
     </header>
@@ -84,7 +88,11 @@
             <label class="label" for="manualPrice">Fallback: Preis manuell eingeben</label>
             <div class="inputRow">
               <input id="manualPrice" inputmode="decimal" placeholder="z.B. 8,60" />
+              <button id="dictateBtn" class="btn" type="button" title="Fokus fürs iPhone-Diktat">🎙️ Diktat</button>
               <button id="addManual" class="btn" type="button">Hinzufügen</button>
+            </div>
+            <div id="iosHint" class="tiny muted" style="margin-top:8px; text-align:center; display:none;">
+              iPhone Hinweis: Safari unterstützt Live-Spracherkennung oft nicht. Tippe auf <b>Diktat</b> und nutze das iOS-Mikro am Keyboard.
             </div>
             <div class="tiny muted">Cent werden exakt übernommen (bis 2 Nachkommastellen).</div>
           </div>
@@ -139,7 +147,7 @@
     </main>
 
     <footer class="foot muted">
-      Hinweis: Spracherkennung nutzt die Web Speech API (Browser-Funktion). Auf iOS kann das je nach Safari/iOS-Version eingeschränkt sein – deshalb gibt’s den manuellen Fallback.
+      Hinweis: Live-Spracherkennung benötigt Browser-Support und meist HTTPS. Auf iOS/Safari ist sie oft eingeschränkt – deshalb gibt’s Diktat (Keyboard-Mikro) + manuellen Fallback.
     </footer>
   </div>
 
