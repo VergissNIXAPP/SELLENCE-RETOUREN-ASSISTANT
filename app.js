@@ -1,12 +1,12 @@
 (() => {
-  const PRICE_MIN = 6.0, PRICE_MAX = 30.0, LIMIT = 500.0;
+  const LIMIT = 500.0;
   const CATS = ["ZIGARETTEN","FEINSCHNITT","CONSUMABLES"];
   const $ = (id)=>document.getElementById(id);
 
   const state = { creditRate:0.90, activeCat:"ZIGARETTEN", packages:[], current:null, recognition:null, listening:false };
 
   const euro = (n)=> n.toFixed(2).replace(".",",")+" €";
-  const round10c = (n)=> Math.round(n*10)/10;
+  const round10c = (n)=> n;
 
   const blankPackage = (index)=>({ index, createdAt:new Date().toISOString(), items:{ZIGARETTEN:{},FEINSCHNITT:{},CONSUMABLES:{}}, history:[], closed:false });
 
@@ -157,9 +157,9 @@
     if(pkg.closed){ toast("Aktuelles Paket ist abgeschlossen. Starte ein neues Paket.","warn"); return; }
 
     const p=round10c(price);
-    if(!(p>=PRICE_MIN && p<=PRICE_MAX)){ toast(`Preis außerhalb Bereich (${PRICE_MIN}–${PRICE_MAX} €): ${euro(p)}`,"danger"); return; }
+–${PRICE_MAX} €): ${euro(p)}`,"danger"); return; }
 
-    const key=p.toFixed(1);
+    const key=p.toFixed(2);
     pkg.items[cat] ||= {};
     pkg.items[cat][key] = (pkg.items[cat][key]||0) + 1;
     pkg.history.push({cat, key, ts:Date.now()});
@@ -177,7 +177,7 @@
   function removeOne(price, cat){
     const pkg=state.current;
     if(!pkg || pkg.closed) return;
-    const key=round10c(price).toFixed(1);
+    const key=round10c(price).toFixed(2);
     const map=pkg.items[cat]||{};
     if(!map[key]) return;
     map[key]-=1; if(map[key]<=0) delete map[key];
@@ -354,10 +354,7 @@
 
     $("nextPkgBtn").onclick=()=>{ closeLimitModal(); startNewPackage(); };
     $("endBtn").onclick=()=>{ closeLimitModal(); closeCurrentPackage(); toast("Retoure beendet (Pakete bleiben gespeichert).","ok"); };
-
-    $("exportBtn").onclick=exportCSV;
-
-    $("resetBtn").onclick=()=>{
+$("resetBtn").onclick=()=>{
       if(confirm("Wirklich ALLES löschen? (Pakete + Einstellungen)")){
         localStorage.removeItem("sellence_retouren_assistant_v1");
         state.packages=[]; state.current=blankPackage(1); state.packages.push(state.current);
