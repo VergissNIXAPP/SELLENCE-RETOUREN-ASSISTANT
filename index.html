@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0f1e" />
+  <title>SELLENCE-RETOUREN-ASSISTANT</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <div class="brand">
+        <div class="logo">S</div>
+        <div class="titles">
+          <div class="name">SELLENCE-RETOUREN-ASSISTANT</div>
+          <div class="sub">Voice-first · iPhone/iPad optimiert · Offline PWA</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="pill-group" role="group" aria-label="Gutschrift">
+          <button id="credit90" class="pill" type="button">90% Gutschrift</button>
+          <button id="credit55" class="pill" type="button">55% Gutschrift</button>
+        </div>
+
+        <div class="pill-group" role="group" aria-label="Kategorie">
+          <button data-cat="ZIGARETTEN" class="pill cat" type="button">ZIGARETTEN</button>
+          <button data-cat="FEINSCHNITT" class="pill cat" type="button">FEINSCHNITT</button>
+          <button data-cat="CONSUMABLES" class="pill cat" type="button">Consumables</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="card">
+        <div class="row between">
+          <div>
+            <div class="h1">Paket <span id="pkgIndex">1</span></div>
+            <div class="muted">Sprich einfach Preise wie „8 Euro“, „8,60“, „10“, „7 €“.</div>
+          </div>
+          <div class="meter">
+            <div class="meterTop">
+              <div class="muted">KVP Gesamt (Paket)</div>
+              <div class="big" id="pkgTotal">0,00 €</div>
+            </div>
+            <div class="progress" aria-label="Fortschritt bis 500 Euro">
+              <div class="bar" id="bar"></div>
+            </div>
+            <div class="muted right"><span id="pct">0</span>% von 500 €</div>
+          </div>
+        </div>
+
+        <div class="row gap">
+          <button id="micBtn" class="btn primary" type="button">
+            <span class="dot" id="micDot"></span>
+            <span id="micText">Aufnahme starten</span>
+          </button>
+          <button id="undoBtn" class="btn" type="button" title="Letzten Eintrag rückgängig">Undo</button>
+          <button id="finishBtn" class="btn warn" type="button" title="Paket manuell abschließen">Paket abschließen</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="row gap wrap">
+          <div class="inputWrap">
+            <label class="label" for="manualPrice">Fallback: Preis manuell eingeben</label>
+            <div class="inputRow">
+              <input id="manualPrice" inputmode="decimal" placeholder="z.B. 8,60" />
+              <button id="addManual" class="btn" type="button">Hinzufügen</button>
+            </div>
+            <div class="tiny muted">Akzeptiert 6–30€; Cent in 10er-Schritten. Wir runden auf 0,10€.</div>
+          </div>
+        </div>
+
+        <div class="toast" id="toast" aria-live="polite"></div>
+      </section>
+
+      <section class="card">
+        <div class="row between">
+          <div class="h2">Inhalte aktuelles Paket</div>
+          <div class="muted">Aktive Kategorie: <span id="activeCatLabel">ZIGARETTEN</span></div>
+        </div>
+
+        <div id="groupList" class="groupList"></div>
+
+        <div class="divider"></div>
+
+        <div class="summaryGrid">
+          <div class="sumCard">
+            <div class="muted">KVP ZIGARETTEN</div>
+            <div class="sum" id="sumZ">0,00 €</div>
+          </div>
+          <div class="sumCard">
+            <div class="muted">KVP FEINSCHNITT</div>
+            <div class="sum" id="sumF">0,00 €</div>
+          </div>
+          <div class="sumCard">
+            <div class="muted">KVP CONSUMABLES</div>
+            <div class="sum" id="sumC">0,00 €</div>
+          </div>
+          <div class="sumCard">
+            <div class="muted">KVP GESAMT</div>
+            <div class="sum" id="sumAll">0,00 €</div>
+          </div>
+          <div class="sumCard accent">
+            <div class="muted">Gutschrift</div>
+            <div class="sum" id="sumCredit">0,00 €</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="row between">
+          <div class="h2">Alle Pakete</div>
+          <div class="row gap">
+            <button id="exportBtn" class="btn" type="button">Export (CSV)</button>
+            <button id="resetBtn" class="btn danger" type="button">Alles löschen</button>
+          </div>
+        </div>
+        <div id="pkgList" class="pkgList"></div>
+      </section>
+    </main>
+
+    <footer class="foot muted">
+      Hinweis: Spracherkennung nutzt die Web Speech API (Browser-Funktion). Auf iOS kann das je nach Safari/iOS-Version eingeschränkt sein – deshalb gibt’s den manuellen Fallback.
+    </footer>
+  </div>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modalCard">
+      <div class="h1" id="modalTitle">500 € erreicht</div>
+      <div class="muted" id="modalText">Bitte nächstes Paket anfangen oder Retoure beenden.</div>
+      <div class="row gap">
+        <button id="nextPkgBtn" class="btn primary" type="button">Nächstes Paket</button>
+        <button id="endBtn" class="btn" type="button">Retoure beenden</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
